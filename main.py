@@ -19,7 +19,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='>', intents=intents)
 
-@Bot.event
+@bot.event
 async def on_ready():
     await Bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f"Over The CivCraft Server", type=discord.ActivityType.watching))
 
