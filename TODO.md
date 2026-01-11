@@ -1,0 +1,1 @@
+- [x] Add a new embed command to main.py that sends a Discord embedded message with title, description, and color.

@@ -55,6 +55,11 @@ async def hello(ctx):
 async def stupid(ctx):
     await ctx.send(f"Stupid Message Spotted! Read <#1123759555663384617> First! ")
 
+@bot.command()
+async def embed(ctx):
+    embed = discord.Embed(title="Example Embed", description="This is an example of a Discord embedded message.", color=0x00ff00)
+    await ctx.send(embed=embed)
+
 
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
