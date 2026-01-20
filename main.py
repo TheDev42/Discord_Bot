@@ -76,7 +76,7 @@ async def dice(ctx: commands.Context):
         print(value_input, file = txt)
 
 
-@client.command()
+@bot.command()
 async def dice1(ctx, value): # value variable will store user's input
     await ctx.send(f"You just bet {value} coins") # sends user's input
     value = value
