@@ -67,7 +67,7 @@ async def embed(ctx):
     await ctx.send(embed=embed)
 
 
-@client.command()
+@bot.command()
 async def dice(ctx: commands.Context):
     await ctx.send("What value do you want to bet on?")
     message = await bot.wait_for("message", check=lambda msg: msg.author == ctx.author, timeout=60.0)
