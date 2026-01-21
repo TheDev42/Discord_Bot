@@ -54,6 +54,7 @@ async def on_raw_reaction_add(payload):
         # Check if the emoji is island
         if str(payload.emoji) == '🏝️':
             # Get the guild and member
+            print("test")
             guild = bot.get_guild(payload.guild_id)
             if guild:
                 member = guild.get_member(payload.user_id)
