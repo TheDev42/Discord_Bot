@@ -77,6 +77,36 @@ async def on_raw_reaction_add(payload):
             else:
                 print("Guild not found.")
 
+@bot.event
+async def on_raw_reaction_remove(payload):
+    # Check if the reaction is on the specified channel and message
+    if payload.channel_id == 1457516340431814880 and payload.message_id == 1458211664121041121:
+        print(f"Reaction removed: {str(payload.emoji)}")  # Debug: print the emoji string
+        # Check if the emoji is island
+        if str(payload.emoji) == '🏝':
+            # Get the guild and member
+            guild = bot.get_guild(payload.guild_id)
+            if guild:
+                member = guild.get_member(payload.user_id)
+                if member:
+                    # Get the role
+                    role = guild.get_role(1123862354392776714)
+                    if role:
+                        try:
+                            # Remove the role from the member
+                            await member.remove_roles(role)
+                            print(f"Removed role {role.name} from {member.name}")
+                        except discord.Forbidden:
+                            print("Bot does not have permission to remove roles.")
+                        except Exception as e:
+                            print(f"Error removing role: {e}")
+                    else:
+                        print("Role not found.")
+                else:
+                    print("Member not found.")
+            else:
+                print("Guild not found.")
+
 
 
 @bot.command()
