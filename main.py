@@ -52,7 +52,7 @@ async def on_raw_reaction_add(payload):
     if payload.channel_id == 1457516340431814880 and payload.message_id == 1458211664121041121:
         print(f"Reaction added: {str(payload.emoji)}")  # Debug: print the emoji string
         # Check if the emoji is island
-        if str(payload.emoji) == '🏝️':
+        if str(payload.emoji) == '🏝':
             # Get the guild and member
             print("test")
             guild = bot.get_guild(payload.guild_id)
