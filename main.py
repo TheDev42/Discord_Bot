@@ -51,7 +51,7 @@ async def on_raw_reaction_add(payload):
     # Check if the reaction is on the specified channel and message
     if payload.channel_id == 1457516340431814880 and payload.message_id == 1458211664121041121:
         # Check if the emoji is thumbs up
-        if str(payload.emoji) == '👍':
+        if str(payload.emoji) == ':island:':
             # Get the guild and member
             guild = bot.get_guild(payload.guild_id)
             if guild:
