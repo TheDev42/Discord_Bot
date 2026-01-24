@@ -139,26 +139,49 @@ async def dice1(ctx, value): # value variable will store user's input
 
 @bot.command()
 async def register(ctx):
+    # Check if the user has already registered
+    try:
+        with open("discord_names.txt", 'r') as f:
+            ids = f.read().splitlines()
+        if str(ctx.author.id) in ids:
+            dm_channel = await ctx.author.create_dm()
+            embed = discord.Embed(title="Error", description="You have already registered for the whitelist.", color=0xff0000)
+            await dm_channel.send(embed=embed)
+            return
+    except FileNotFoundError:
+        pass  # File doesn't exist, so proceed with registration
+
     dm_channel = await ctx.author.create_dm()
-    await dm_channel.send("What is your Minecraft username?")
+    embed = discord.Embed(title="CivCraft Whitelist Application", description="What is your Minecraft Username?", color=0xff0000)
+    await dm_channel.send(embed=embed)
     try:
         msg1 = await bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == dm_channel, timeout=60.0)
         username = msg1.content
         run = True
         while run == True:
             try:
-                await dm_channel.send("How old are you?")
+                embed = discord.Embed(title="CivCraft Whitelist Application", description="How old are you?", color=0xff0000)
+                await dm_channel.send(embed=embed)
                 msg2 = await bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == dm_channel, timeout=60.0)
                 age = int(msg2.content)
                 run = False
             except ValueError as e:
-                await dm_channel.send("that is not a number!")
+                embed = discord.Embed(title="Invalid Input", description="That is not a number!", color=0xff0000)
+                await dm_channel.send(embed=embed)
         discord_id = ctx.author.id
         file_num = random.randint(1, 4)
-        filename = f"file{file_num}.txt"
+        filename = f"all_file{file_num}.txt"
         with open(filename, 'a') as f:
             f.write(f"<@{discord_id}>, {username}, {age}\n")
-        await dm_channel.send("Registration complete!")
+        filename = f"MC_file{file_num}.txt"
+        with open(filename, 'a') as f:
+            f.write(f"{username}\n")
+        filename = f"discord_names.txt"
+        with open(filename, 'a') as f:
+            f.write(f"{discord_id}\n")
+        embed = discord.Embed(title="CivCraft Whitelist Application Approved", description=f"You have been accepted into the CivCraft Minecraft Server!", color=0x00ff00)
+        embed.add_field(name="", value=f"Your minecraft username is: **{username}** and your age is: **{age}** as your info", inline=False)
+        await dm_channel.send(embed=embed)
     except asyncio.TimeoutError:
         await dm_channel.send("You took too long to respond.")
 
