@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 import asyncio
+import random
 
 load_dotenv()
 
@@ -13,7 +14,7 @@ Welcome_channel_id = int(os.getenv('WELCOME_CHANNEL_ID'))
 join_message_id = int(os.getenv('JOIN_MESSAGE_ID'))
 
 # this is for logs
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(filename='bot_log.txt', encoding='utf-8', mode='w')
 
 # bot permission requests
 intents = discord.Intents.default()
@@ -136,11 +137,29 @@ async def dice1(ctx, value): # value variable will store user's input
     await ctx.send(f"You just bet {value} coins") # sends user's input
     value = value
 
-
-
-
-
-
-
+@bot.command()
+async def register(ctx):
+    dm_channel = await ctx.author.create_dm()
+    await dm_channel.send("What is your Minecraft username?")
+    try:
+        msg1 = await bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == dm_channel, timeout=60.0)
+        username = msg1.content
+        run = True
+        while run == True:
+            try:
+                await dm_channel.send("How old are you?")
+                msg2 = await bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == dm_channel, timeout=60.0)
+                age = int(msg2.content)
+                run = False
+            except ValueError as e:
+                await dm_channel.send("that is not a number!")
+        discord_id = ctx.author.id
+        file_num = random.randint(1, 4)
+        filename = f"file{file_num}.txt"
+        with open(filename, 'a') as f:
+            f.write(f"<@{discord_id}>, {username}, {age}\n")
+        await dm_channel.send("Registration complete!")
+    except asyncio.TimeoutError:
+        await dm_channel.send("You took too long to respond.")
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
