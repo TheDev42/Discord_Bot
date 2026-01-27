@@ -141,7 +141,7 @@ async def dice1(ctx, value): # value variable will store user's input
 
 
 
-@bot.event
+@bot.event # broken and i dont know why
 async def on_raw_reaction_add(payload):
     # Check if the reaction is on the specified channel and message
     if payload.channel_id == 997617979724402688 and payload.message_id == 1464701743442165811:
@@ -234,7 +234,7 @@ async def on_raw_reaction_add(payload):
 
 
 @bot.command()
-async def register(ctx):
+async def register(ctx, payload):
     # Check if the user has already registered
 #    try:
 #        with open("discord_names.txt", 'r') as f:
@@ -275,6 +275,7 @@ async def register(ctx):
                 await dm_channel.send(embed=embed)
         discord_id = ctx.author.id
         file_num = random.randint(1, 4)
+        role_num = file_num
         filename = f"all_file{file_num}.txt"
         with open(filename, 'a') as f:
             f.write(f"<@{discord_id}>, {username}, {age}\n")
@@ -287,6 +288,39 @@ async def register(ctx):
         embed = discord.Embed(title="CivCraft Whitelist Application Approved", description=f"You have been accepted into the CivCraft Minecraft Server!", color=0x00ff00)
         embed.add_field(name="", value=f"Your minecraft username is: **{username}** and your age is: **{age}** as your info", inline=False)
         await dm_channel.send(embed=embed)  
+        guild = ctx.guild.id
+        if guild:
+            member = guild.get_guild(payload.guild_id)
+            if member:
+                # Get the role
+                role = guild.get_role(1123862354392776714)
+                if role:
+                    try:
+                        if role_num == 1:
+                            await member.add_roles(0)
+                            print(f"Added role 1 to {member.name}")
+                        elif role_num == 2:
+                            await member.add_roles(0)
+                            print(f"Added role 2 to {member.name}")
+                        elif role_num == 3:
+                            await member.add_roles(0)
+                            print(f"Added role 3 to {member.name}")
+                        elif role_num == 4:
+                            await member.add_roles(0)
+                            print(f"Added role 4 to {member.name}")
+                        else:
+                            print(f"error Adding role {role_num} to {member.name}")
+                    except discord.Forbidden:
+                        print("Bot does not have permission to add roles.")
+                    except Exception as e:
+                        print(f"Error adding role: {e}")
+                else:
+                    print("Role not found.")
+            else:
+                print("Member not found.")
+        else:
+            print("Guild not found.")
+
         try: # Update the registration count in the specified channel name
             with open("discord_names.txt", 'r') as f:
                 count = len(f.readlines())
@@ -297,5 +331,6 @@ async def register(ctx):
             print(f"Error updating registration count: {e}")
     except asyncio.TimeoutError:
         await dm_channel.send("You took too long to respond.")
+
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
